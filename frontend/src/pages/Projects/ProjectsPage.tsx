@@ -78,7 +78,7 @@ const ProjectsPage = () => {
     <div className="p-6">
       <div className="mb-6">
         <div className="flex items-center justify-between mb-4">
-          <h1 className="text-3xl font-bold text-gray-900 dark:text-white">
+          <h1 className="text-3xl font-bold texttext-white dark:text-white">
             Quản lý dự án nhóm
           </h1>
           <button
@@ -95,7 +95,7 @@ const ProjectsPage = () => {
           placeholder="Tìm kiếm dự án..."
           value={searchTerm}
           onChange={(e) => setSearchTerm(e.target.value)}
-          className="input max-w-md"
+          className="input max-w-md bg-transparent"
         />
       </div>
 
@@ -113,11 +113,11 @@ const ProjectsPage = () => {
           {projects.map(project => (
             <div
               key={project._id}
-              className="card hover:shadow-lg transition-shadow cursor-pointer bg-[#FFF8DE] border-2 border-orange-300"
+              className="card hover:shadow-lg transition-shadow cursor-pointer bg-[#2A4759] border-2 border-[#A2AF9B]"
               onClick={() => navigate(`/projects/${project._id}`)}
             >
               <div className="flex items-start justify-between mb-4">
-                <h3 className="text-xl font-semibold dark:text-white flex gap-2 text-sky-600 items-center">
+                <h3 className="text-xl font-semibold dark:text-white flex gap-2 text-[#819A91] items-center">
                   <Icon icon='ic:outline-work-outline' size={35} />
                   {project.name}
                 </h3>
@@ -139,7 +139,7 @@ const ProjectsPage = () => {
                 </p>
               )}
 
-              <div className="flex items-center justify-between text-sm text-gray-500 dark:text-gray-400">
+              <div className="flex items-center justify-between text-sm text-white dark:text-gray-400">
                 <div className="flex items-center gap-2 text-[#4300FF]">
                   <Icon icon="mdi:account" size={16} />
                   <span>{project.ownerId.name}</span>
@@ -151,7 +151,7 @@ const ProjectsPage = () => {
                 <div className="flex items-center gap-4 text-sm">
                   <div className="flex items-center gap-1">
                     <Icon icon="mdi:account-group" size={16} />
-                    <span>_{project.members.length + 1}_ Member</span>
+                    <span>{project.members.length + 1} Member</span>
                   </div>
                 </div>
               </div>
@@ -162,31 +162,31 @@ const ProjectsPage = () => {
 
       {isCreateModalOpen && (
         <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
-          <div className="bg-white dark:bg-gray-800 rounded-lg shadow-xl p-6 w-full max-w-md">
-            <h2 className="text-2xl font-bold text-gray-900 dark:text-white mb-4">
+          <div className="bg-[#435663] dark:bg-gray-800 rounded-lg shadow-xl p-6 w-full max-w-md">
+            <h2 className="text-2xl font-bold text-green-500 dark:text-white mb-4">
               Tạo dự án mới
             </h2>
             <div className="space-y-4">
               <div>
-                <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
+                <label className="block text-sm font-medium text-white dark:text-gray-300 mb-1">
                   Tên dự án *
                 </label>
                 <input
                   type="text"
                   value={newProjectName}
                   onChange={(e) => setNewProjectName(e.target.value)}
-                  className="input"
+                  className="input bg-transparent"
                   placeholder="Nhập tên dự án..."
                 />
               </div>
               <div>
-                <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
+                <label className="block text-sm font-medium text-white dark:text-gray-300 mb-1">
                   Mô tả
                 </label>
                 <textarea
                   value={newProjectDescription}
                   onChange={(e) => setNewProjectDescription(e.target.value)}
-                  className="input"
+                  className="input bg-transparent"
                   rows={3}
                   placeholder="Nhập mô tả dự án..."
                 />

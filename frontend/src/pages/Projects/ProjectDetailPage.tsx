@@ -489,7 +489,7 @@ const ProjectDetailPage = () => {
                               className="text-xs mt-1 px-2 py-1 bg-slate-700 border border-slate-600 rounded text-slate-200 focus:outline-none focus:ring-2 focus:ring-indigo-500"
                             >
                               <option value="viewer">Người xem</option>
-                              <option value="editor">Biên tập viên</option>
+                              <option value="editor">Người chỉnh sửa</option>
                             </select>
                           ) : (
                             <p className="text-xs text-slate-400">
