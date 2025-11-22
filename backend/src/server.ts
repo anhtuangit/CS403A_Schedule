@@ -12,10 +12,8 @@ import projectRoutes from './routes/project.routes';
 import labelRoutes from './routes/label.routes';
 import adminRoutes from './routes/admin.routes';
 
-// Load environment variables FIRST before any other imports that might use them
 dotenv.config();
 
-// Log JWT_SECRET status on startup
 // const jwtSecret = process.env.JWT_SECRET || 'your-secret-key';
 // console.log('🔑 JWT_SECRET loaded:', jwtSecret ? jwtSecret.substring(0, 10) + '...' : 'NOT SET (using default)');
 

@@ -13,9 +13,6 @@ export interface AuthResponse {
   user: User;
 }
 
-/**
- * Google Sign-In
- */
 export const googleSignIn = async (token: string): Promise<AuthResponse> => {
   console.log('🔄 Calling /auth/google endpoint...');
   const response = await api.post<AuthResponse>('/auth/google', { token });
@@ -26,9 +23,6 @@ export const googleSignIn = async (token: string): Promise<AuthResponse> => {
   return response.data;
 };
 
-/**
- * Get current user
- */
 export const getCurrentUser = async (): Promise<{ user: User }> => {
   try {
     const response = await api.get<{ user: User }>('/auth/me');
@@ -40,9 +34,6 @@ export const getCurrentUser = async (): Promise<{ user: User }> => {
   }
 };
 
-/**
- * Logout
- */
 export const logout = async (): Promise<void> => {
   await api.post('/auth/logout');
 };

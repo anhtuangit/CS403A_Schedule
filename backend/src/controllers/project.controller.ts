@@ -6,9 +6,6 @@ import ProjectTask from '../models/ProjectTask.model';
 import User from '../models/User.model';
 import { sendProjectInvitation } from '../utils/email.util';
 
-/**
- * Get all projects user is involved in
- */
 export const getProjects = async (req: Request, res: Response): Promise<void> => {
   try {
     if (!req.user) {
@@ -41,9 +38,6 @@ export const getProjects = async (req: Request, res: Response): Promise<void> =>
   }
 };
 
-/**
- * Get project by ID with columns and tasks
- */
 export const getProjectById = async (req: Request, res: Response): Promise<void> => {
   try {
     if (!req.user) {
@@ -67,7 +61,6 @@ export const getProjectById = async (req: Request, res: Response): Promise<void>
       return;
     }
 
-    // Get columns with tasks
     const columns = await Column.find({ projectId: project._id })
       .populate({
         path: 'tasks',
@@ -94,9 +87,6 @@ export const getProjectById = async (req: Request, res: Response): Promise<void>
   }
 };
 
-/**
- * Create project
- */
 export const createProject = async (req: Request, res: Response): Promise<void> => {
   try {
     if (!req.user) {
@@ -130,9 +120,6 @@ export const createProject = async (req: Request, res: Response): Promise<void> 
   }
 };
 
-/**
- * Update project
- */
 export const updateProject = async (req: Request, res: Response): Promise<void> => {
   try {
     if (!req.user) {
@@ -168,9 +155,6 @@ export const updateProject = async (req: Request, res: Response): Promise<void> 
   }
 };
 
-/**
- * Delete project
- */
 export const deleteProject = async (req: Request, res: Response): Promise<void> => {
   try {
     if (!req.user) {
@@ -188,7 +172,6 @@ export const deleteProject = async (req: Request, res: Response): Promise<void> 
       return;
     }
 
-    // Delete all columns and tasks
     const columns = await Column.find({ projectId: project._id });
     const taskIds = columns.flatMap(col => col.tasks);
     await ProjectTask.deleteMany({ _id: { $in: taskIds } });
@@ -202,9 +185,6 @@ export const deleteProject = async (req: Request, res: Response): Promise<void> 
   }
 };
 
-/**
- * Add member to project
- */
 export const addMember = async (req: Request, res: Response): Promise<void> => {
   try {
     if (!req.user) {
@@ -229,14 +209,12 @@ export const addMember = async (req: Request, res: Response): Promise<void> => {
       return;
     }
 
-    // Check if user exists
     const user = await User.findById(userId);
     if (!user) {
       res.status(404).json({ message: 'User not found' });
       return;
     }
 
-    // Check if already a member
     const isMember = project.members.some(
       m => m.userId.toString() === userId
     );
@@ -264,9 +242,6 @@ export const addMember = async (req: Request, res: Response): Promise<void> => {
   }
 };
 
-/**
- * Invite member to project by email
- */
 export const inviteMemberByEmail = async (req: Request, res: Response): Promise<void> => {
   try {
     if (!req.user) {
@@ -295,10 +270,8 @@ export const inviteMemberByEmail = async (req: Request, res: Response): Promise<
       return;
     }
 
-    // Check if user exists
     const user = await User.findOne({ email: email.toLowerCase() });
 
-    // Check if already a member (if user exists)
     if (user) {
       const isMember = project.ownerId.toString() === user._id.toString() ||
         project.members.some(m => m.userId.toString() === user._id.toString());
@@ -308,7 +281,6 @@ export const inviteMemberByEmail = async (req: Request, res: Response): Promise<
         return;
       }
 
-      // If user exists, add them directly
       project.members.push({
         userId: user._id,
         role: role || 'editor',
@@ -318,7 +290,6 @@ export const inviteMemberByEmail = async (req: Request, res: Response): Promise<
       await project.save();
     }
 
-    // Send invitation email
     const inviterName = (project.ownerId as any).name || req.user.name || 'Một người dùng';
     const projectName = project.name;
     const memberRole = role || 'editor';
@@ -334,10 +305,8 @@ export const inviteMemberByEmail = async (req: Request, res: Response): Promise<
       );
     } catch (emailError) {
       console.error('Failed to send invitation email:', emailError);
-      // Continue even if email fails
     }
 
-    // If user was added, populate and return
     if (user) {
       await project.populate('members.userId', 'name email picture');
       res.json({
@@ -355,9 +324,6 @@ export const inviteMemberByEmail = async (req: Request, res: Response): Promise<
   }
 };
 
-/**
- * Update member role
- */
 export const updateMemberRole = async (req: Request, res: Response): Promise<void> => {
   try {
     if (!req.user) {
@@ -405,9 +371,6 @@ export const updateMemberRole = async (req: Request, res: Response): Promise<voi
   }
 };
 
-/**
- * Remove member from project
- */
 export const removeMember = async (req: Request, res: Response): Promise<void> => {
   try {
     if (!req.user) {
@@ -443,9 +406,6 @@ export const removeMember = async (req: Request, res: Response): Promise<void> =
   }
 };
 
-/**
- * Create column
- */
 export const createColumn = async (req: Request, res: Response): Promise<void> => {
   try {
     if (!req.user) {
@@ -473,7 +433,6 @@ export const createColumn = async (req: Request, res: Response): Promise<void> =
       return;
     }
 
-    // Get max order
     const maxOrder = await Column.findOne({ projectId: project._id })
       .sort({ order: -1 })
       .select('order');
@@ -497,9 +456,6 @@ export const createColumn = async (req: Request, res: Response): Promise<void> =
   }
 };
 
-/**
- * Update column
- */
 export const updateColumn = async (req: Request, res: Response): Promise<void> => {
   try {
     if (!req.user) {
@@ -517,7 +473,6 @@ export const updateColumn = async (req: Request, res: Response): Promise<void> =
 
     const project = column.projectId as any;
 
-    // Check permission
     const hasPermission = project.ownerId.toString() === req.user!._id.toString() ||
       project.members.some((m: any) =>
         m.userId.toString() === req.user!._id.toString() && m.role === 'editor'
@@ -544,9 +499,6 @@ export const updateColumn = async (req: Request, res: Response): Promise<void> =
   }
 };
 
-/**
- * Delete column
- */
 export const deleteColumn = async (req: Request, res: Response): Promise<void> => {
   try {
     if (!req.user) {
@@ -564,7 +516,6 @@ export const deleteColumn = async (req: Request, res: Response): Promise<void> =
 
     const project = column.projectId as any;
 
-    // Check permission
     const hasPermission = project.ownerId.toString() === req.user!._id.toString() ||
       project.members.some((m: any) =>
         m.userId.toString() === req.user!._id.toString() && m.role === 'editor'
@@ -575,10 +526,8 @@ export const deleteColumn = async (req: Request, res: Response): Promise<void> =
       return;
     }
 
-    // Delete all tasks in column
     await ProjectTask.deleteMany({ _id: { $in: column.tasks } });
 
-    // Remove column from project
     await Project.updateOne(
       { _id: project._id },
       { $pull: { columns: column._id } }
@@ -592,9 +541,6 @@ export const deleteColumn = async (req: Request, res: Response): Promise<void> =
   }
 };
 
-/**
- * Create project task
- */
 export const createProjectTask = async (req: Request, res: Response): Promise<void> => {
   try {
     if (!req.user) {
@@ -612,7 +558,6 @@ export const createProjectTask = async (req: Request, res: Response): Promise<vo
 
     const project = column.projectId as any;
 
-    // Check permission
     const hasPermission = project.ownerId.toString() === req.user!._id.toString() ||
       project.members.some((m: any) =>
         m.userId.toString() === req.user!._id.toString() && m.role === 'editor'
@@ -638,7 +583,6 @@ export const createProjectTask = async (req: Request, res: Response): Promise<vo
       return;
     }
 
-    // Get max order in column
     const maxOrder = await ProjectTask.findOne({ columnId: column._id })
       .sort({ order: -1 })
       .select('order');
@@ -671,9 +615,6 @@ export const createProjectTask = async (req: Request, res: Response): Promise<vo
   }
 };
 
-/**
- * Update project task
- */
 export const updateProjectTask = async (req: Request, res: Response): Promise<void> => {
   try {
     if (!req.user) {
@@ -691,7 +632,6 @@ export const updateProjectTask = async (req: Request, res: Response): Promise<vo
 
     const project = task.projectId as any;
 
-    // Check permission
     const hasPermission = project.ownerId.toString() === req.user!._id.toString() ||
       project.members.some((m: any) =>
         m.userId.toString() === req.user!._id.toString() && m.role === 'editor'
@@ -734,9 +674,6 @@ export const updateProjectTask = async (req: Request, res: Response): Promise<vo
   }
 };
 
-/**
- * Delete project task
- */
 export const deleteProjectTask = async (req: Request, res: Response): Promise<void> => {
   try {
     if (!req.user) {
@@ -754,7 +691,6 @@ export const deleteProjectTask = async (req: Request, res: Response): Promise<vo
 
     const project = task.projectId as any;
 
-    // Check permission
     const hasPermission = project.ownerId.toString() === req.user!._id.toString() ||
       project.members.some((m: any) =>
         m.userId.toString() === req.user!._id.toString() && m.role === 'editor'
@@ -765,7 +701,6 @@ export const deleteProjectTask = async (req: Request, res: Response): Promise<vo
       return;
     }
 
-    // Remove task from column
     await Column.updateOne(
       { _id: task.columnId },
       { $pull: { tasks: task._id } }
@@ -779,9 +714,6 @@ export const deleteProjectTask = async (req: Request, res: Response): Promise<vo
   }
 };
 
-/**
- * Move task between columns or reorder
- */
 export const moveTask = async (req: Request, res: Response): Promise<void> => {
   try {
     if (!req.user) {
@@ -801,7 +733,6 @@ export const moveTask = async (req: Request, res: Response): Promise<void> => {
 
     const project = task.projectId as any;
 
-    // Check permission
     const hasPermission = project.ownerId.toString() === req.user!._id.toString() ||
       project.members.some((m: any) =>
         m.userId.toString() === req.user!._id.toString() && m.role === 'editor'
@@ -814,15 +745,12 @@ export const moveTask = async (req: Request, res: Response): Promise<void> => {
 
     const oldColumnId = task.columnId;
 
-    // If moving to different column
     if (columnId && columnId.toString() !== oldColumnId.toString()) {
-      // Remove from old column
       await Column.updateOne(
         { _id: oldColumnId },
         { $pull: { tasks: task._id } }
       );
 
-      // Add to new column
       task.columnId = columnId;
       await Column.updateOne(
         { _id: columnId },
@@ -830,7 +758,6 @@ export const moveTask = async (req: Request, res: Response): Promise<void> => {
       );
     }
 
-    // Update order
     if (newOrder !== undefined) {
       task.order = newOrder;
     }
@@ -847,9 +774,6 @@ export const moveTask = async (req: Request, res: Response): Promise<void> => {
   }
 };
 
-/**
- * Add comment to task
- */
 export const addComment = async (req: Request, res: Response): Promise<void> => {
   try {
     if (!req.user) {
@@ -867,7 +791,6 @@ export const addComment = async (req: Request, res: Response): Promise<void> => 
 
     const project = task.projectId as any;
 
-    // Check if user has access to project
     const hasAccess = project.ownerId.toString() === req.user!._id.toString() ||
       project.members.some((m: any) =>
         m.userId.toString() === req.user!._id.toString()
@@ -898,7 +821,6 @@ export const addComment = async (req: Request, res: Response): Promise<void> => 
 
     await task.save();
 
-    // Populate comment user
     const updatedTask = await ProjectTask.findById(task._id)
       .populate('comments.userId', 'name email picture');
 
@@ -911,9 +833,6 @@ export const addComment = async (req: Request, res: Response): Promise<void> => 
   }
 };
 
-/**
- * Delete comment
- */
 export const deleteComment = async (req: Request, res: Response): Promise<void> => {
   try {
     if (!req.user) {
@@ -931,7 +850,6 @@ export const deleteComment = async (req: Request, res: Response): Promise<void> 
 
     const project = task.projectId as any;
 
-    // Check permission
     const hasPermission = project.ownerId.toString() === req.user!._id.toString() ||
       project.members.some((m: any) =>
         m.userId.toString() === req.user!._id.toString() && m.role === 'editor'

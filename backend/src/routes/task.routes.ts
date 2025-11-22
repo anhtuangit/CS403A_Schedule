@@ -1,21 +1,13 @@
 import express from 'express';
 import fs from 'fs';
 import path from 'path';
-import {
-  getTasks,
-  getTaskById,
-  createTask,
-  updateTask,
-  deleteTask,
-  updateTaskTimeSlot
-} from '../controllers/task.controller';
+import { getTasks, getTaskById, createTask, updateTask, deleteTask, updateTaskTimeSlot } from '../controllers/task.controller';
 import { authenticate } from '../middleware/auth.middleware';
 import { upload } from '../utils/upload.util';
 import Task from '../models/Task.model';
 
 const router = express.Router();
 
-// All routes require authentication
 router.use(authenticate);
 
 router.get('/', getTasks);
@@ -25,7 +17,6 @@ router.put('/:id', updateTask);
 router.delete('/:id', deleteTask);
 router.patch('/:id/time-slot', updateTaskTimeSlot);
 
-// File upload route
 router.post('/:id/upload', upload.single('file'), async (req, res) => {
   try {
     if (!req.user) {
@@ -48,7 +39,6 @@ router.post('/:id/upload', upload.single('file'), async (req, res) => {
       return;
     }
 
-    // Add file to attachments
     const fileUrl = `/uploads/${req.file.filename}`;
     task.attachments.push(fileUrl);
     await task.save();
@@ -63,7 +53,6 @@ router.post('/:id/upload', upload.single('file'), async (req, res) => {
   }
 });
 
-// Delete attachment route
 router.delete('/:id/attachments/:filename', async (req, res) => {
   try {
     if (!req.user) {
@@ -84,11 +73,9 @@ router.delete('/:id/attachments/:filename', async (req, res) => {
     const filename = req.params.filename;
     const filePath = `/uploads/${filename}`;
     
-    // Remove from attachments array
     task.attachments = task.attachments.filter(att => att !== filePath);
     await task.save();
 
-    // Delete file from filesystem
     const fileFullPath = path.join(__dirname, '../../uploads', filename);
     if (fs.existsSync(fileFullPath)) {
       fs.unlinkSync(fileFullPath);

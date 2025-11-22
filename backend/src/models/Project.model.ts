@@ -62,7 +62,6 @@ const ProjectSchema = new Schema<IProject>(
   }
 );
 
-// Index for faster queries
 ProjectSchema.index({ ownerId: 1 });
 ProjectSchema.index({ 'members.userId': 1 });
 

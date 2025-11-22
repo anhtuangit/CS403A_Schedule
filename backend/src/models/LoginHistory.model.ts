@@ -32,7 +32,6 @@ const LoginHistorySchema = new Schema<ILoginHistory>(
   }
 );
 
-// Index for faster queries
 LoginHistorySchema.index({ userId: 1, loginAt: -1 });
 
 export default mongoose.model<ILoginHistory>('LoginHistory', LoginHistorySchema);

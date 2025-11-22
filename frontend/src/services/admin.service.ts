@@ -33,9 +33,6 @@ export interface SystemConfig {
   updatedAt: string;
 }
 
-/**
- * Get all users (Admin)
- */
 export const getUsers = async (params?: {
   search?: string;
   role?: string;
@@ -55,33 +52,21 @@ export const getUsers = async (params?: {
   return response.data;
 };
 
-/**
- * Toggle user status (Admin)
- */
 export const toggleUserStatus = async (userId: string, isActive: boolean): Promise<{ message: string; user: User }> => {
   const response = await api.patch<{ message: string; user: User }>(`/admin/users/${userId}/status`, { isActive });
   return response.data;
 };
 
-/**
- * Get system statistics (Admin)
- */
 export const getStatistics = async (): Promise<SystemStatistics> => {
   const response = await api.get<SystemStatistics>('/admin/statistics');
   return response.data;
 };
 
-/**
- * Get system configuration (Admin)
- */
 export const getSystemConfig = async (): Promise<{ config: SystemConfig }> => {
   const response = await api.get<{ config: SystemConfig }>('/admin/config');
   return response.data;
 };
 
-/**
- * Update system configuration (Admin)
- */
 export const updateSystemConfig = async (data: {
   appName?: string;
   theme?: 'light' | 'dark';
@@ -91,9 +76,6 @@ export const updateSystemConfig = async (data: {
   return response.data;
 };
 
-/**
- * Get user login history (Admin)
- */
 export const getUserLoginHistory = async (userId: string, page?: number, limit?: number): Promise<{
   history: LoginHistory[];
   pagination: {

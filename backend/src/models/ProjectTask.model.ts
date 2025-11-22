@@ -112,7 +112,6 @@ const ProjectTaskSchema = new Schema<IProjectTask>(
   }
 );
 
-// Indexes for better query performance
 ProjectTaskSchema.index({ projectId: 1, columnId: 1, order: 1 });
 ProjectTaskSchema.index({ columnId: 1 });
 

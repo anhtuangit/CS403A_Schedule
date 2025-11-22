@@ -11,9 +11,6 @@ interface ConfirmDialogProps {
   type?: 'danger' | 'warning' | 'info';
 }
 
-/**
- * Confirm Dialog Component
- */
 const ConfirmDialog = ({
   isOpen,
   title,
@@ -56,18 +53,17 @@ const ConfirmDialog = ({
     <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
       <div className="bg-white dark:bg-gray-800 rounded-lg shadow-xl max-w-md w-full p-6">
         <div className="flex items-start gap-4 mb-4">
-          <div className={`flex-shrink-0 w-12 h-12 rounded-full flex items-center justify-center ${
-            type === 'danger' ? 'bg-red-100 dark:bg-red-900/20' :
-            type === 'warning' ? 'bg-yellow-100 dark:bg-yellow-900/20' :
-            'bg-blue-100 dark:bg-blue-900/20'
-          }`}>
+          <div className={`flex-shrink-0 w-12 h-12 rounded-full flex items-center justify-center ${type === 'danger' ? 'bg-red-100 dark:bg-red-900/20' :
+              type === 'warning' ? 'bg-yellow-100 dark:bg-yellow-900/20' :
+                'bg-blue-100 dark:bg-blue-900/20'
+            }`}>
             <Icon
               icon={getIcon()}
               size={24}
               className={
                 type === 'danger' ? 'text-red-600 dark:text-red-400' :
-                type === 'warning' ? 'text-yellow-600 dark:text-yellow-400' :
-                'text-blue-600 dark:text-blue-400'
+                  type === 'warning' ? 'text-yellow-600 dark:text-yellow-400' :
+                    'text-blue-600 dark:text-blue-400'
               }
             />
           </div>

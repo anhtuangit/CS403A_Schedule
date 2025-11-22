@@ -7,9 +7,6 @@ interface AdminRouteProps {
   children: React.ReactNode;
 }
 
-/**
- * Admin route - requires admin role
- */
 const AdminRoute = ({ children }: AdminRouteProps) => {
   const { user } = useSelector((state: RootState) => state.auth);
 

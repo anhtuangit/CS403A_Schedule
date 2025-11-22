@@ -13,7 +13,6 @@ const initialState: LabelState = {
   error: null
 };
 
-// Async thunks
 export const fetchLabels = createAsyncThunk(
   'labels/fetchLabels',
   async (type: string | undefined, { rejectWithValue }) => {

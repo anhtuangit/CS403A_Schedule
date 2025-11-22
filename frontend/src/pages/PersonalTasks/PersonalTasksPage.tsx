@@ -12,9 +12,6 @@ import ConfirmDialog from '../../components/Common/ConfirmDialog';
 import Icon from '../../components/Icon/Icon';
 import { format } from 'date-fns';
 
-/**
- * Personal Tasks Page with Timeline
- */
 const PersonalTasksPage = () => {
   const dispatch = useDispatch<AppDispatch>();
   const { tasks, isLoading } = useSelector((state: RootState) => state.tasks);
@@ -54,7 +51,6 @@ const PersonalTasksPage = () => {
 
   const loadTasks = () => {
     if (selectedDate) {
-      // Filter by specific date
       const startDate = new Date(selectedDate);
       startDate.setHours(0, 0, 0, 0);
       const endDate = new Date(selectedDate);
@@ -67,7 +63,6 @@ const PersonalTasksPage = () => {
         search: searchTerm || undefined
       }));
     } else {
-      // Show all tasks (no date filter)
       dispatch(fetchTasks({
         timeSlot: selectedTimeSlot || undefined,
         search: searchTerm || undefined
@@ -86,7 +81,6 @@ const PersonalTasksPage = () => {
     const sourceTimeSlot = source.droppableId;
 
     if (newTimeSlot !== sourceTimeSlot) {
-      // Calculate new time based on time slot
       const slot = timeSlots.find(s => s.id === newTimeSlot);
       if (slot && selectedDate) {
         const newStartTime = new Date(selectedDate);
@@ -138,7 +132,6 @@ const PersonalTasksPage = () => {
           await dispatch(deleteExistingTask(taskId)).unwrap();
           toast.success('Xóa công việc thành công');
           setConfirmDialog({ ...confirmDialog, isOpen: false });
-          // Close detail modal if it's open
           if (isDetailModalOpen && viewingTask?._id === taskId) {
             setIsDetailModalOpen(false);
             setViewingTask(null);
@@ -213,7 +206,6 @@ const PersonalTasksPage = () => {
           <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary-500"></div>
         </div>
       ) : selectedDate ? (
-        // Timeline view for specific date
         <DragDropContext onDragEnd={handleDragEnd}>
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
             {timeSlots.map(slot => (
@@ -267,7 +259,6 @@ const PersonalTasksPage = () => {
           </div>
         </DragDropContext>
       ) : (
-        // List view for all days
         <div className="space-y-6">
           {timeSlots.map(slot => {
             const slotTasks = getTasksByTimeSlot(slot.id);
@@ -308,8 +299,6 @@ const PersonalTasksPage = () => {
           )}
         </div>
       )}
-
-      {/* Task Detail Modal (View Only) */}
       {isDetailModalOpen && viewingTask && (
         <TaskDetailModal
           task={viewingTask}
@@ -325,8 +314,6 @@ const PersonalTasksPage = () => {
           }}
         />
       )}
-
-      {/* Task Edit Modal */}
       {isModalOpen && (
         <TaskModal
           task={editingTask}

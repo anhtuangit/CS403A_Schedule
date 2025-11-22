@@ -32,7 +32,6 @@ import InviteMemberModal from '../../components/Projects/InviteMemberModal';
 import ConfirmDialog from '../../components/Common/ConfirmDialog';
 import Icon from '../../components/Icon/Icon';
 
-// Sortable Column Component
 const SortableColumn = ({ column, labels, canEdit, onCreateTask, onEditTask, onDeleteTask, onViewTask, onEditColumn, onDeleteColumn }: any) => {
   const {
     attributes,
@@ -77,9 +76,6 @@ const SortableColumn = ({ column, labels, canEdit, onCreateTask, onEditTask, onD
   );
 };
 
-/**
- * Project Detail Page with Kanban Board
- */
 const ProjectDetailPage = () => {
   const { id } = useParams<{ id: string }>();
   const dispatch = useDispatch<AppDispatch>();
@@ -105,7 +101,7 @@ const ProjectDetailPage = () => {
     title: '',
     message: '',
     type: 'warning',
-    onConfirm: () => {}
+    onConfirm: () => { }
   });
 
   useEffect(() => {
@@ -118,7 +114,7 @@ const ProjectDetailPage = () => {
   const sensors = useSensors(
     useSensor(PointerSensor, {
       activationConstraint: {
-        distance: 8, // 8px movement before drag starts
+        distance: 8,
       },
     }),
     useSensor(KeyboardSensor, {
@@ -143,7 +139,6 @@ const ProjectDetailPage = () => {
     const activeId = active.id as string;
     const overId = over.id as string;
 
-    // Handle column drag and drop
     if (active.data.current?.type === 'COLUMN') {
       if (activeId === overId) {
         return;
@@ -160,20 +155,15 @@ const ProjectDetailPage = () => {
 
         const newColumns = arrayMove(sortedColumns, oldIndex, newIndex);
 
-        // Update column orders on server
-        const updatePromises = newColumns.map((col, index) => 
+        const updatePromises = newColumns.map((col, index) =>
           updateColumnService(col._id, { order: index })
         );
         await Promise.all(updatePromises);
 
-        toast.success('Di chuyển cột thành công');
-        
-        // Refresh to get latest data
         if (id) {
           dispatch(fetchProjectById(id));
         }
       } catch (error: any) {
-        toast.error(error?.response?.data?.message || error?.message || 'Di chuyển cột thất bại');
         if (id) {
           dispatch(fetchProjectById(id));
         }
@@ -181,7 +171,6 @@ const ProjectDetailPage = () => {
       return;
     }
 
-    // Handle task drag and drop
     if (active.data.current?.type === 'TASK') {
       const sourceColumnId = active.data.current.columnId as string;
       const destColumnId = over.data.current?.columnId || overId;
@@ -194,17 +183,14 @@ const ProjectDetailPage = () => {
       const destColumn = columns.find(c => c._id === destColumnId);
 
       if (!sourceColumn) {
-        toast.error('Không tìm thấy cột nguồn');
         return;
       }
 
       if (sourceColumnId !== destColumnId && !destColumn) {
-        toast.error('Không tìm thấy cột đích');
         return;
       }
 
       try {
-        // Get sorted tasks from source column
         const sortedSourceTasks = [...sourceColumn.tasks].sort((a, b) => (a.order || 0) - (b.order || 0));
         const task = sortedSourceTasks.find(t => t._id === activeId);
 
@@ -215,27 +201,21 @@ const ProjectDetailPage = () => {
 
         const oldIndex = sortedSourceTasks.findIndex(t => t._id === activeId);
 
-        // Optimistic update for UI
         if (sourceColumnId === destColumnId) {
-          // Reorder within same column
           const sortedDestTasks = [...sourceColumn.tasks].sort((a, b) => (a.order || 0) - (b.order || 0));
           const newIndex = sortedDestTasks.findIndex(t => t._id === overId);
           if (newIndex === -1) return;
-          
+
           const newTasks = arrayMove(sortedDestTasks, oldIndex, newIndex);
           dispatch(updateColumn({ ...sourceColumn, tasks: newTasks }));
         } else {
-          // Move to different column
           if (!destColumn) {
             toast.error('Không tìm thấy cột đích');
             return;
           }
-          
-          // Remove from source column
           const newSourceTasks = sortedSourceTasks.filter(t => t._id !== task._id);
           dispatch(updateColumn({ ...sourceColumn, tasks: newSourceTasks }));
-          
-          // Add to destination column
+
           const sortedDestTasks = [...destColumn.tasks].sort((a, b) => (a.order || 0) - (b.order || 0));
           const newIndex = sortedDestTasks.findIndex(t => t._id === overId);
           const insertIndex = newIndex === -1 ? sortedDestTasks.length : newIndex;
@@ -244,13 +224,12 @@ const ProjectDetailPage = () => {
           dispatch(updateColumn({ ...destColumn, tasks: newDestTasks }));
         }
 
-        // Update on server
         if (!destColumn) {
           toast.error('Không tìm thấy cột đích');
           return;
         }
-        
-        const sortedDestTasks = sourceColumnId === destColumnId 
+
+        const sortedDestTasks = sourceColumnId === destColumnId
           ? [...sourceColumn.tasks].sort((a, b) => (a.order || 0) - (b.order || 0))
           : [...destColumn.tasks].sort((a, b) => (a.order || 0) - (b.order || 0));
         const newIndex = sortedDestTasks.findIndex(t => t._id === overId);
@@ -261,15 +240,10 @@ const ProjectDetailPage = () => {
           newOrder: finalIndex
         });
 
-        toast.success('Di chuyển task thành công');
-
-        // Refresh to get latest data from server
         if (id) {
           dispatch(fetchProjectById(id));
         }
       } catch (error: any) {
-        toast.error(error?.response?.data?.message || error?.message || 'Di chuyển task thất bại');
-        // Refresh on error to revert optimistic update
         if (id) {
           dispatch(fetchProjectById(id));
         }
@@ -280,10 +254,10 @@ const ProjectDetailPage = () => {
 
   const handleCreateColumn = async (name: string) => {
     if (!id) return;
-    
+
     try {
       await createColumn(id, { name });
-      toast.success('Tạo cột thành công');
+      toast.success('Bạn vừa tạo 1 cột');
       setIsCreatingColumn(false);
       dispatch(fetchProjectById(id));
     } catch (error: any) {
@@ -297,10 +271,10 @@ const ProjectDetailPage = () => {
 
   const handleEditColumn = async (column: any) => {
     if (!id) return;
-    
+
     try {
       await updateColumnService(column._id, { name: column.name });
-      toast.success('Cập nhật cột thành công');
+      toast.success('Bạn vừa cập nhật cột');
       dispatch(fetchProjectById(id));
     } catch (error: any) {
       toast.error(error || 'Cập nhật cột thất bại');
@@ -330,7 +304,7 @@ const ProjectDetailPage = () => {
 
   const handleUpdateMemberRole = async (userId: string, newRole: 'viewer' | 'editor') => {
     if (!id) return;
-    
+
     try {
       await updateMemberRole(id, userId, newRole);
       toast.success('Cập nhật quyền thành công');
@@ -361,7 +335,6 @@ const ProjectDetailPage = () => {
     });
   };
 
-  // Check if current user is owner or editor
   const isOwner = currentProject && user && currentProject.ownerId._id === user.id;
   const userMember = currentProject?.members.find(m => m.userId._id === user?.id);
   const isEditor = isOwner || userMember?.role === 'editor';
@@ -374,21 +347,19 @@ const ProjectDetailPage = () => {
   };
 
   const handleViewTask = async (task: any) => {
-    // Refresh task data to get latest comments
     if (id) {
       try {
         const response = await getProjectById(id);
         const updatedTask = response.columns
           .flatMap(col => col.tasks)
           .find(t => t._id === task._id);
-        
+
         if (updatedTask) {
           setViewingTask(updatedTask);
         } else {
           setViewingTask(task);
         }
       } catch (error) {
-        // Fallback to original task if refresh fails
         setViewingTask(task);
       }
     } else {
@@ -433,8 +404,6 @@ const ProjectDetailPage = () => {
               </p>
             )}
           </div>
-          
-          {/* Members section */}
           <div className="ml-4">
             <div className="flex items-center gap-2 mb-2">
               <button
@@ -445,8 +414,8 @@ const ProjectDetailPage = () => {
                 <span className="text-sm font-medium text-slate-200">
                   {currentProject.members.length + 1} thành viên
                 </span>
-                <Icon 
-                  icon={isMembersExpanded ? "mdi:chevron-up" : "mdi:chevron-down"} 
+                <Icon
+                  icon={isMembersExpanded ? "mdi:chevron-up" : "mdi:chevron-down"}
                   size={20}
                   className="text-slate-400"
                 />
@@ -461,14 +430,13 @@ const ProjectDetailPage = () => {
                 </button>
               )}
             </div>
-            
+
             {isMembersExpanded && (
               <div className="absolute right-6 mt-2 bg-slate-800 rounded-lg shadow-2xl border border-slate-700 p-4 min-w-[300px] z-10">
                 <h3 className="font-semibold text-slate-100 mb-3">
                   Thành viên
                 </h3>
                 <div className="space-y-2 max-h-64 overflow-y-auto">
-                  {/* Owner */}
                   <div className="flex items-center justify-between p-2 rounded-lg bg-slate-700/50 border border-slate-600">
                     <div className="flex items-center gap-2">
                       {currentProject.ownerId.picture ? (
@@ -492,8 +460,7 @@ const ProjectDetailPage = () => {
                       </div>
                     </div>
                   </div>
-                  
-                  {/* Members */}
+
                   {currentProject.members.map((member) => (
                     <div
                       key={member.userId._id}
@@ -567,7 +534,7 @@ const ProjectDetailPage = () => {
                 labels={labels}
                 canEdit={canEdit}
                 onCreateTask={() => canEdit && handleCreateTask(column._id)}
-                onEditTask={canEdit ? handleEditTask : () => {}}
+                onEditTask={canEdit ? handleEditTask : () => { }}
                 onDeleteTask={canEdit ? (taskId: string) => {
                   setConfirmDialog({
                     isOpen: true,
@@ -586,26 +553,26 @@ const ProjectDetailPage = () => {
                       }
                     }
                   });
-                } : () => {}}
+                } : () => { }}
                 onViewTask={handleViewTask}
                 onEditColumn={canEdit ? handleEditColumn : undefined}
                 onDeleteColumn={canEdit ? handleDeleteColumn : undefined}
               />
             ))}
-            
+
             {isCreatingColumn && (
               <Column
                 column={{ _id: '', projectId: '', name: '', order: 0, tasks: [], createdAt: '', updatedAt: '' }}
                 labels={labels}
-                onCreateTask={() => {}}
-                onEditTask={() => {}}
-                onDeleteTask={() => {}}
+                onCreateTask={() => { }}
+                onEditTask={() => { }}
+                onDeleteTask={() => { }}
                 isCreatingColumn={true}
                 onCreateColumn={handleCreateColumn}
                 onCancelCreateColumn={() => setIsCreatingColumn(false)}
               />
             )}
-            
+
             {canEdit && !isCreatingColumn && (
               <button
                 onClick={handleStartCreateColumn}
@@ -620,7 +587,6 @@ const ProjectDetailPage = () => {
         <DragOverlay>
           {activeId ? (
             <div className="opacity-50 rotate-2 shadow-lg">
-              {/* Render preview of dragged item */}
             </div>
           ) : null}
         </DragOverlay>
@@ -637,9 +603,7 @@ const ProjectDetailPage = () => {
             setSelectedColumnId('');
           }}
           onTaskUpdate={(updatedTask) => {
-            // Update selected task with new data (especially comments)
             setSelectedTask(updatedTask);
-            // Also refresh project to update task in columns
             if (id) {
               dispatch(fetchProjectById(id));
             }

@@ -89,7 +89,6 @@ const TaskSchema = new Schema<ITask>(
   }
 );
 
-// Indexes for better query performance
 TaskSchema.index({ userId: 1, startTime: 1 });
 TaskSchema.index({ userId: 1, timeSlot: 1 });
 

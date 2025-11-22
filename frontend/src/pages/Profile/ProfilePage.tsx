@@ -4,9 +4,6 @@ import { toast } from 'react-toastify';
 import Icon from '../../components/Icon/Icon';
 import { format } from 'date-fns';
 
-/**
- * Profile Page
- */
 const ProfilePage = () => {
   const [profile, setProfile] = useState<any>(null);
   const [loginHistory, setLoginHistory] = useState<any[]>([]);

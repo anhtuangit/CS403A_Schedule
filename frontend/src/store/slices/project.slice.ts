@@ -17,7 +17,6 @@ const initialState: ProjectState = {
   error: null
 };
 
-// Async thunks
 export const fetchProjects = createAsyncThunk(
   'projects/fetchProjects',
   async ({ search }: { search?: string }, { rejectWithValue }) => {
@@ -102,7 +101,6 @@ const projectSlice = createSlice({
   },
   extraReducers: (builder) => {
     builder
-      // Fetch projects
       .addCase(fetchProjects.pending, (state) => {
         state.isLoading = true;
         state.error = null;
@@ -115,7 +113,6 @@ const projectSlice = createSlice({
         state.isLoading = false;
         state.error = action.payload as string;
       })
-      // Fetch project by ID
       .addCase(fetchProjectById.pending, (state) => {
         state.isLoading = true;
         state.error = null;
@@ -129,11 +126,9 @@ const projectSlice = createSlice({
         state.isLoading = false;
         state.error = action.payload as string;
       })
-      // Create project
       .addCase(createNewProject.fulfilled, (state, action: PayloadAction<Project>) => {
         state.projects.push(action.payload);
       })
-      // Delete project
       .addCase(deleteExistingProject.fulfilled, (state, action: PayloadAction<string>) => {
         state.projects = state.projects.filter(p => p._id !== action.payload);
         if (state.currentProject?._id === action.payload) {

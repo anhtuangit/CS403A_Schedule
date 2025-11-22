@@ -10,22 +10,19 @@ interface ProjectTaskCardProps {
   onView?: () => void;
 }
 
-/**
- * Project Task Card component
- */
 const ProjectTaskCard = ({ task, labels, onEdit, onDelete, onView }: ProjectTaskCardProps) => {
   const taskLabelIds = task.labels.map(l => typeof l === 'string' ? l : l._id);
   const taskLabels = labels.filter(l => taskLabelIds.includes(l._id));
 
   return (
-    <div 
+    <div
       className="bg-slate-700 rounded-lg p-4 shadow-md hover:shadow-lg transition-all cursor-pointer border border-slate-600 hover:border-slate-500"
       onClick={onView}
     >
       <h4 className="font-semibold text-slate-100 mb-2">
         {task.title}
       </h4>
-      
+
       {task.shortDescription && (
         <p className="text-sm text-slate-300 mb-2 line-clamp-2">
           {task.shortDescription}
@@ -72,7 +69,7 @@ const ProjectTaskCard = ({ task, labels, onEdit, onDelete, onView }: ProjectTask
       )}
 
       {(onEdit || onDelete) && (
-        <div 
+        <div
           className="flex items-center justify-end gap-2 mt-2"
           onClick={(e) => e.stopPropagation()}
         >

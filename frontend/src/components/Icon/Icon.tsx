@@ -8,17 +8,17 @@ interface IconProps {
 }
 const getIconString = (icon: string): string => {
   if (!icon) return 'mdi:help-circle-outline';
-  
+
   if (icon.includes(':')) {
     return icon;
   }
-  
+
   return `mdi:${icon}`;
 };
 
 const Icon = ({ icon, className = '', size = 24, style }: IconProps) => {
   const iconToUse = getIconString(icon);
-  
+
   return (
     <IconifyIcon
       icon={iconToUse}
@@ -27,7 +27,6 @@ const Icon = ({ icon, className = '', size = 24, style }: IconProps) => {
       height={size}
       style={style}
       onError={(e) => {
-        // Fallback to default icon if icon fails to load
         if (iconToUse !== 'mdi:help-circle-outline') {
           const fallbackIcon = 'mdi:help-circle-outline';
           try {

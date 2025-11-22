@@ -1,8 +1,5 @@
 import nodemailer from 'nodemailer';
 
-/**
- * Create email transporter
- */
 const createTransporter = () => {
   return nodemailer.createTransport({
     host: process.env.EMAIL_HOST || 'smtp.gmail.com',
@@ -15,9 +12,6 @@ const createTransporter = () => {
   });
 };
 
-/**
- * Send email reminder
- */
 export const sendEmailReminder = async (
   to: string,
   subject: string,
@@ -53,9 +47,6 @@ export const sendEmailReminder = async (
   }
 };
 
-/**
- * Send project invitation email
- */
 export const sendProjectInvitation = async (
   to: string,
   projectName: string,

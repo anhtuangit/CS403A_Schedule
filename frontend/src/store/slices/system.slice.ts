@@ -13,7 +13,6 @@ const initialState: SystemState = {
   error: null
 };
 
-// Async thunks
 export const fetchSystemConfig = createAsyncThunk(
   'system/fetchConfig',
   async (_, { rejectWithValue }) => {

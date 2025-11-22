@@ -1,6 +1,4 @@
-/**
- * Determine time slot based on hour
- */
+
 export const getTimeSlot = (hour: number): 'morning' | 'noon' | 'afternoon' | 'evening' => {
   if (hour >= 5 && hour < 11) {
     return 'morning';
@@ -13,9 +11,6 @@ export const getTimeSlot = (hour: number): 'morning' | 'noon' | 'afternoon' | 'e
   }
 };
 
-/**
- * Get time slot from date
- */
 export const getTimeSlotFromDate = (date: Date): 'morning' | 'noon' | 'afternoon' | 'evening' => {
   const hour = date.getHours();
   return getTimeSlot(hour);

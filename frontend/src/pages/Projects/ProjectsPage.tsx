@@ -8,9 +8,6 @@ import Icon from '../../components/Icon/Icon';
 import ConfirmDialog from '../../components/Common/ConfirmDialog';
 import { format } from 'date-fns';
 
-/**
- * Projects Page
- */
 const ProjectsPage = () => {
   const dispatch = useDispatch<AppDispatch>();
   const navigate = useNavigate();

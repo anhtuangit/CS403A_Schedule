@@ -6,9 +6,6 @@ import { loginWithGoogle } from '../../store/slices/auth.slice';
 import { toast } from 'react-toastify';
 import Icon from '../../components/Icon/Icon';
 
-/**
- * Login page with Google OAuth2
- */
 const LoginPage = () => {
   const dispatch = useDispatch<AppDispatch>();
   const navigate = useNavigate();
@@ -16,7 +13,6 @@ const LoginPage = () => {
 
   useEffect(() => {
     if (isAuthenticated && !isLoading && user) {
-      // Small delay to ensure state is fully updated
       setTimeout(() => {
         navigate('/', { replace: true });
       }, 100);
@@ -30,7 +26,6 @@ const LoginPage = () => {
   }, [error]);
 
   useEffect(() => {
-    // Load Google Sign-In script
     const loadGoogleScript = () => {
       if (!(window as any).google) {
         const script = document.createElement('script');
@@ -55,7 +50,7 @@ const LoginPage = () => {
       }
 
       const clientId = import.meta.env.VITE_GOOGLE_CLIENT_ID || '';
-      
+
       if (!clientId || clientId === 'your-google-client-id') {
         console.error('VITE_GOOGLE_CLIENT_ID chưa được cấu hình');
         toast.error('Google Client ID chưa được cấu hình');
@@ -68,7 +63,7 @@ const LoginPage = () => {
       google.accounts.id.initialize({
         client_id: clientId,
         callback: handleCredentialResponse,
-        ux_mode: 'popup' // Use popup to avoid redirect issues
+        ux_mode: 'popup'
       });
 
       const buttonElement = document.getElementById('google-signin-button');
@@ -89,8 +84,7 @@ const LoginPage = () => {
         const result = await dispatch(loginWithGoogle(response.credential)).unwrap();
         console.log('✅ Login successful, user:', result);
         console.log('✅ Redux state updated, isAuthenticated should be true');
-        
-        // Wait for cookie to be set and state to update, then navigate
+
         setTimeout(() => {
           console.log('🔄 Navigating to home page...');
           console.log('🔄 Current auth state:', { isAuthenticated, user: user?.email });
@@ -103,7 +97,6 @@ const LoginPage = () => {
       }
     };
 
-    // Initialize after component mounts
     loadGoogleScript();
   }, [dispatch, navigate]);
 
@@ -122,7 +115,7 @@ const LoginPage = () => {
 
         <div className="space-y-4">
           <div id="google-signin-button" className="flex justify-center"></div>
-          
+
           {isLoading && (
             <div className="flex items-center justify-center py-4">
               <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary-500"></div>

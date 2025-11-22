@@ -15,7 +15,6 @@ const initialState: TaskState = {
   error: null
 };
 
-// Async thunks
 export const fetchTasks = createAsyncThunk(
   'tasks/fetchTasks',
   async (params: { timeSlot?: string; search?: string; startDate?: string; endDate?: string } | undefined, { rejectWithValue }) => {
@@ -89,7 +88,6 @@ const taskSlice = createSlice({
   },
   extraReducers: (builder) => {
     builder
-      // Fetch tasks
       .addCase(fetchTasks.pending, (state) => {
         state.isLoading = true;
         state.error = null;
@@ -102,11 +100,9 @@ const taskSlice = createSlice({
         state.isLoading = false;
         state.error = action.payload as string;
       })
-      // Create task
       .addCase(createNewTask.fulfilled, (state, action: PayloadAction<Task>) => {
         state.tasks.push(action.payload);
       })
-      // Update task
       .addCase(updateExistingTask.fulfilled, (state, action: PayloadAction<Task>) => {
         const index = state.tasks.findIndex(t => t._id === action.payload._id);
         if (index !== -1) {
@@ -116,14 +112,12 @@ const taskSlice = createSlice({
           state.selectedTask = action.payload;
         }
       })
-      // Delete task
       .addCase(deleteExistingTask.fulfilled, (state, action: PayloadAction<string>) => {
         state.tasks = state.tasks.filter(t => t._id !== action.payload);
         if (state.selectedTask?._id === action.payload) {
           state.selectedTask = null;
         }
       })
-      // Move task time slot
       .addCase(moveTaskTimeSlot.fulfilled, (state, action: PayloadAction<Task>) => {
         const index = state.tasks.findIndex(t => t._id === action.payload._id);
         if (index !== -1) {

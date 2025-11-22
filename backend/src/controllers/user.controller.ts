@@ -2,9 +2,6 @@ import { Request, Response } from 'express';
 import User from '../models/User.model';
 import LoginHistory from '../models/LoginHistory.model';
 
-/**
- * Get user profile
- */
 export const getProfile = async (req: Request, res: Response): Promise<void> => {
   try {
     if (!req.user) {
@@ -24,9 +21,6 @@ export const getProfile = async (req: Request, res: Response): Promise<void> => 
   }
 };
 
-/**
- * Update user profile
- */
 export const updateProfile = async (req: Request, res: Response): Promise<void> => {
   try {
     if (!req.user) {
@@ -62,9 +56,6 @@ export const updateProfile = async (req: Request, res: Response): Promise<void> 
   }
 };
 
-/**
- * Get login history
- */
 export const getLoginHistory = async (req: Request, res: Response): Promise<void> => {
   try {
     if (!req.user) {

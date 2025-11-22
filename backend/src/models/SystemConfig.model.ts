@@ -34,7 +34,6 @@ const SystemConfigSchema = new Schema<ISystemConfig>(
   }
 );
 
-// Ensure only one document exists
 SystemConfigSchema.statics.getConfig = async function() {
   let config = await this.findOne();
   if (!config) {

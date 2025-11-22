@@ -12,9 +12,6 @@ interface TaskModalProps {
   onSave: (data: CreateTaskData) => Promise<void>;
 }
 
-/**
- * Task modal for create/edit
- */
 const TaskModal = ({ task, labels, selectedDate, onClose, onSave }: TaskModalProps) => {
   const [formData, setFormData] = useState<CreateTaskData>({
     title: '',
@@ -45,12 +42,11 @@ const TaskModal = ({ task, labels, selectedDate, onClose, onSave }: TaskModalPro
         emailReminder: task.emailReminder ? format(new Date(task.emailReminder), "yyyy-MM-dd'T'HH:mm") : ''
       });
     } else {
-      // Default times for new task
       const startTime = new Date(selectedDate);
       startTime.setHours(9, 0, 0, 0);
       const endTime = new Date(selectedDate);
       endTime.setHours(10, 0, 0, 0);
-      
+
       setFormData({
         title: '',
         shortDescription: '',
@@ -259,15 +255,13 @@ const TaskModal = ({ task, labels, selectedDate, onClose, onSave }: TaskModalPro
                 />
               </div>
             </div>
-
-            {/* Labels */}
             {Object.entries(groupedLabels).map(([type, typeLabels]) => (
               <div key={type}>
                 <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
                   {type === 'task_type' ? 'Loại công việc' :
-                   type === 'status' ? 'Trạng thái' :
-                   type === 'difficulty' ? 'Độ khó' :
-                   'Độ ưu tiên'}
+                    type === 'status' ? 'Trạng thái' :
+                      type === 'difficulty' ? 'Độ khó' :
+                        'Độ ưu tiên'}
                 </label>
                 <div className="flex flex-wrap gap-2">
                   {typeLabels.map(label => {
@@ -277,17 +271,16 @@ const TaskModal = ({ task, labels, selectedDate, onClose, onSave }: TaskModalPro
                         key={label._id}
                         type="button"
                         onClick={() => toggleLabel(label._id)}
-                        className={`px-4 py-2 rounded-full text-sm font-medium transition-all duration-200 flex items-center gap-2 shadow-sm hover:shadow-md ${
-                          isSelected
+                        className={`px-4 py-2 rounded-full text-sm font-medium transition-all duration-200 flex items-center gap-2 shadow-sm hover:shadow-md ${isSelected
                             ? 'text-white transform scale-105'
                             : 'bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-gray-600'
-                        }`}
+                          }`}
                         style={
                           isSelected
                             ? {
-                                backgroundColor: label.color || '#3B82F6',
-                                boxShadow: `0 4px 14px 0 ${(label.color || '#3B82F6')}40`
-                              }
+                              backgroundColor: label.color || '#3B82F6',
+                              boxShadow: `0 4px 14px 0 ${(label.color || '#3B82F6')}40`
+                            }
                             : {}
                         }
                       >
@@ -304,8 +297,6 @@ const TaskModal = ({ task, labels, selectedDate, onClose, onSave }: TaskModalPro
                 </div>
               </div>
             ))}
-
-            {/* File Attachments */}
             <div>
               <div className="flex items-center justify-between mb-2">
                 <label className="block text-sm font-medium text-gray-700 dark:text-gray-300">
@@ -370,8 +361,6 @@ const TaskModal = ({ task, labels, selectedDate, onClose, onSave }: TaskModalPro
                 </p>
               )}
             </div>
-
-            {/* Subtasks */}
             <div>
               <div className="flex items-center justify-between mb-2">
                 <label className="block text-sm font-medium text-gray-700 dark:text-gray-300">

@@ -27,15 +27,12 @@ interface ColumnProps {
   dragHandleProps?: any;
 }
 
-/**
- * Column component for Kanban board
- */
-const Column = ({ 
-  column, 
-  labels, 
-  onCreateTask, 
-  onEditTask, 
-  onDeleteTask, 
+const Column = ({
+  column,
+  labels,
+  onCreateTask,
+  onEditTask,
+  onDeleteTask,
   onViewTask,
   isCreatingColumn,
   onCreateColumn,
@@ -125,11 +122,11 @@ const Column = ({
       <div className="flex items-center justify-between mb-4">
         <div className="flex items-center gap-2 flex-1 min-w-0">
           {dragHandleProps && (
-            <div 
+            <div
               className="text-slate-500 hover:text-indigo-400 flex-shrink-0 transition-colors cursor-grab active:cursor-grabbing touch-none select-none"
               data-column-drag-handle="true"
               {...dragHandleProps}
-              style={{ 
+              style={{
                 pointerEvents: 'auto',
                 zIndex: 1000
               }}
@@ -161,7 +158,7 @@ const Column = ({
             </h3>
           )}
         </div>
-        <div 
+        <div
           className="flex items-center gap-2"
           onClick={(e) => e.stopPropagation()}
           onMouseDown={(e) => e.stopPropagation()}
@@ -224,7 +221,6 @@ const Column = ({
   );
 };
 
-// Sortable Task Component
 const SortableTask = ({ task, labels, canEdit, onEditTask, onDeleteTask, onViewTask }: any) => {
   const {
     attributes,
@@ -252,11 +248,10 @@ const SortableTask = ({ task, labels, canEdit, onEditTask, onDeleteTask, onViewT
     <div
       ref={setNodeRef}
       style={style}
-      className={`transition-all ${
-        isDragging 
-          ? 'rotate-2 shadow-2xl scale-105 shadow-indigo-500/20' 
+      className={`transition-all ${isDragging
+          ? 'rotate-2 shadow-2xl scale-105 shadow-indigo-500/20'
           : 'hover:shadow-lg hover:shadow-slate-900/50'
-      } ${!canEdit ? 'cursor-default' : 'cursor-grab active:cursor-grabbing'}`}
+        } ${!canEdit ? 'cursor-default' : 'cursor-grab active:cursor-grabbing'}`}
     >
       <div {...attributes} {...listeners}>
         <ProjectTaskCard
@@ -271,7 +266,6 @@ const SortableTask = ({ task, labels, canEdit, onEditTask, onDeleteTask, onViewT
   );
 };
 
-// Sortable Column Content Component
 const SortableColumnContent = ({ column, labels, canEdit, onEditTask, onDeleteTask, onViewTask }: any) => {
   const { setNodeRef, isOver } = useDroppable({
     id: column._id,
@@ -290,17 +284,13 @@ const SortableColumnContent = ({ column, labels, canEdit, onEditTask, onDeleteTa
     >
       <div
         ref={setNodeRef}
-        className={`min-h-[200px] space-y-2 ${
-          isOver ? 'bg-indigo-500/10 rounded-lg border-2 border-dashed border-indigo-500' : ''
-        }`}
+        className={`min-h-[200px] space-y-2 ${isOver ? 'bg-indigo-500/10 rounded-lg border-2 border-dashed border-indigo-500' : ''
+          }`}
         onPointerDown={(e) => {
-          // Prevent column drag when clicking in task area
           const target = e.target as HTMLElement;
           if (!target.closest('[data-column-drag-handle]')) {
-            // Allow task drag to proceed
             return;
           }
-          // If clicking on column drag handle, stop propagation to prevent task drag
           e.stopPropagation();
         }}
       >

@@ -9,9 +9,6 @@ interface InviteMemberModalProps {
   onSuccess: () => void;
 }
 
-/**
- * Invite Member Modal
- */
 const InviteMemberModal = ({ projectId, onClose, onSuccess }: InviteMemberModalProps) => {
   const [email, setEmail] = useState('');
   const [role, setRole] = useState<'viewer' | 'editor'>('editor');
@@ -19,13 +16,12 @@ const InviteMemberModal = ({ projectId, onClose, onSuccess }: InviteMemberModalP
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    
+
     if (!email.trim()) {
       toast.error('Vui lòng nhập email');
       return;
     }
 
-    // Basic email validation
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     if (!emailRegex.test(email)) {
       toast.error('Email không hợp lệ');

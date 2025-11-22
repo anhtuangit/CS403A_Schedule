@@ -1,9 +1,6 @@
 import { Request, Response } from 'express';
 import Label from '../models/Label.model';
 
-/**
- * Get all labels
- */
 export const getLabels = async (req: Request, res: Response): Promise<void> => {
   try {
     const { type } = req.query;
@@ -23,9 +20,6 @@ export const getLabels = async (req: Request, res: Response): Promise<void> => {
   }
 };
 
-/**
- * Get label by ID
- */
 export const getLabelById = async (req: Request, res: Response): Promise<void> => {
   try {
     const label = await Label.findById(req.params.id).select('-__v');
@@ -41,9 +35,6 @@ export const getLabelById = async (req: Request, res: Response): Promise<void> =
   }
 };
 
-/**
- * Create label (Admin only)
- */
 export const createLabel = async (req: Request, res: Response): Promise<void> => {
   try {
     const { name, color, type, icon, description, isDefault } = req.body;
@@ -76,9 +67,6 @@ export const createLabel = async (req: Request, res: Response): Promise<void> =>
   }
 };
 
-/**
- * Update label (Admin only)
- */
 export const updateLabel = async (req: Request, res: Response): Promise<void> => {
   try {
     const label = await Label.findById(req.params.id);
@@ -114,9 +102,6 @@ export const updateLabel = async (req: Request, res: Response): Promise<void> =>
   }
 };
 
-/**
- * Delete label (Admin only)
- */
 export const deleteLabel = async (req: Request, res: Response): Promise<void> => {
   try {
     const label = await Label.findById(req.params.id);

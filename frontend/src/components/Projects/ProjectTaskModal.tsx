@@ -14,9 +14,6 @@ interface ProjectTaskModalProps {
   onTaskUpdate?: (updatedTask: ProjectTask) => void;
 }
 
-/**
- * Project Task Modal
- */
 const ProjectTaskModal = ({ task, labels, onClose, onSave, onTaskUpdate }: ProjectTaskModalProps) => {
   const [formData, setFormData] = useState({
     title: '',
@@ -62,11 +59,9 @@ const ProjectTaskModal = ({ task, labels, onClose, onSave, onTaskUpdate }: Proje
       const response = await addComment(currentTask._id, { content: comment });
       setComment('');
       toast.success('Thêm bình luận thành công');
-      
-      // Update current task with new comment
+
       if (response.task) {
         setCurrentTask(response.task);
-        // Notify parent component to update task
         if (onTaskUpdate) {
           onTaskUpdate(response.task);
         }
@@ -224,15 +219,13 @@ const ProjectTaskModal = ({ task, labels, onClose, onSave, onTaskUpdate }: Proje
                 rows={4}
               />
             </div>
-
-            {/* Labels */}
             {Object.entries(groupedLabels).map(([type, typeLabels]) => (
               <div key={type}>
                 <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
                   {type === 'task_type' ? 'Loại công việc' :
-                   type === 'status' ? 'Trạng thái' :
-                   type === 'difficulty' ? 'Độ khó' :
-                   'Độ ưu tiên'}
+                    type === 'status' ? 'Trạng thái' :
+                      type === 'difficulty' ? 'Độ khó' :
+                        'Độ ưu tiên'}
                 </label>
                 <div className="flex flex-wrap gap-2">
                   {(typeLabels as Label[]).map((label: Label) => {
@@ -242,17 +235,16 @@ const ProjectTaskModal = ({ task, labels, onClose, onSave, onTaskUpdate }: Proje
                         key={label._id}
                         type="button"
                         onClick={() => toggleLabel(label._id)}
-                        className={`px-4 py-2 rounded-full text-sm font-medium transition-all duration-200 flex items-center gap-2 shadow-sm hover:shadow-md ${
-                          isSelected
+                        className={`px-4 py-2 rounded-full text-sm font-medium transition-all duration-200 flex items-center gap-2 shadow-sm hover:shadow-md ${isSelected
                             ? 'text-white transform scale-105'
                             : 'bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-gray-600'
-                        }`}
+                          }`}
                         style={
                           isSelected
                             ? {
-                                backgroundColor: label.color || '#3B82F6',
-                                boxShadow: `0 4px 14px 0 ${(label.color || '#3B82F6')}40`
-                              }
+                              backgroundColor: label.color || '#3B82F6',
+                              boxShadow: `0 4px 14px 0 ${(label.color || '#3B82F6')}40`
+                            }
                             : {}
                         }
                       >
@@ -269,8 +261,6 @@ const ProjectTaskModal = ({ task, labels, onClose, onSave, onTaskUpdate }: Proje
                 </div>
               </div>
             ))}
-
-            {/* Subtasks */}
             <div>
               <div className="flex items-center justify-between mb-2">
                 <label className="block text-sm font-medium text-gray-700 dark:text-gray-300">
@@ -311,8 +301,6 @@ const ProjectTaskModal = ({ task, labels, onClose, onSave, onTaskUpdate }: Proje
                 </div>
               ))}
             </div>
-
-            {/* Attachments section - only show for existing tasks */}
             {currentTask && (
               <div>
                 <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
@@ -370,8 +358,6 @@ const ProjectTaskModal = ({ task, labels, onClose, onSave, onTaskUpdate }: Proje
                 </div>
               </div>
             )}
-
-            {/* Comments section - only show for existing tasks */}
             {currentTask && (
               <div>
                 <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">

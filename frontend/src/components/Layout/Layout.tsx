@@ -3,7 +3,6 @@ import { useDispatch, useSelector } from 'react-redux';
 import { RootState, AppDispatch } from '../../store/store';
 import { logout } from '../../store/slices/auth.slice';
 import Icon from '../Icon/Icon';
-import { useState } from 'react';
 
 const Layout = () => {
   const dispatch = useDispatch<AppDispatch>();

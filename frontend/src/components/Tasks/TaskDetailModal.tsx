@@ -195,8 +195,6 @@ const TaskDetailModal = ({ task, labels, onClose, onEdit, onDelete }: TaskDetail
                 </div>
               </div>
             )}
-
-            {/* Attachments */}
             {task.attachments && task.attachments.length > 0 && (
               <div>
                 <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
@@ -228,8 +226,6 @@ const TaskDetailModal = ({ task, labels, onClose, onEdit, onDelete }: TaskDetail
                 </div>
               </div>
             )}
-
-            {/* Email Reminder */}
             {task.emailReminder && (
               <div>
                 <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
@@ -241,8 +237,6 @@ const TaskDetailModal = ({ task, labels, onClose, onEdit, onDelete }: TaskDetail
                 </div>
               </div>
             )}
-
-            {/* Created/Updated */}
             <div className="grid grid-cols-2 gap-4 pt-4 border-t border-gray-200 dark:border-gray-700">
               <div>
                 <label className="block text-xs text-gray-500 dark:text-gray-400 mb-1">
@@ -262,8 +256,6 @@ const TaskDetailModal = ({ task, labels, onClose, onEdit, onDelete }: TaskDetail
               </div>
             </div>
           </div>
-
-          {/* Footer */}
           <div className="flex justify-end gap-4 pt-6 mt-6 border-t border-gray-200 dark:border-gray-700">
             <button
               onClick={onClose}

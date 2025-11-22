@@ -36,7 +36,6 @@ const ColumnSchema = new Schema<IColumn>(
   }
 );
 
-// Index for better query performance
 ColumnSchema.index({ projectId: 1, order: 1 });
 
 export default mongoose.model<IColumn>('Column', ColumnSchema);

@@ -1,17 +1,9 @@
 import express from 'express';
-import {
-  getUsers,
-  toggleUserStatus,
-  getStatistics,
-  getSystemConfig,
-  updateSystemConfig,
-  getUserLoginHistory
-} from '../controllers/admin.controller';
+import { getUsers, toggleUserStatus, getStatistics, getSystemConfig, updateSystemConfig, getUserLoginHistory} from '../controllers/admin.controller';
 import { authenticate, isAdmin } from '../middleware/auth.middleware';
 
 const router = express.Router();
 
-// All routes require admin authentication
 router.use(authenticate, isAdmin);
 
 router.get('/users', getUsers);

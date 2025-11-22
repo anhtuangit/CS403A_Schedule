@@ -15,7 +15,6 @@ const initialState: AuthState = {
   error: null
 };
 
-// Async thunks
 export const loginWithGoogle = createAsyncThunk(
   'auth/loginWithGoogle',
   async (token: string, { rejectWithValue }) => {
@@ -35,9 +34,8 @@ export const fetchCurrentUser = createAsyncThunk(
       const response = await getCurrentUser();
       return response.user;
     } catch (error: any) {
-      // Don't treat 401 as error if user is not logged in (normal case)
       if (error.response?.status === 401) {
-        return rejectWithValue(null); // Return null instead of error message
+        return rejectWithValue(null); 
       }
       return rejectWithValue(error.response?.data?.message || 'Failed to fetch user');
     }
@@ -65,7 +63,6 @@ const authSlice = createSlice({
   },
   extraReducers: (builder) => {
     builder
-      // Login with Google
       .addCase(loginWithGoogle.pending, (state) => {
         state.isLoading = true;
         state.error = null;
@@ -83,7 +80,6 @@ const authSlice = createSlice({
         state.isAuthenticated = false;
         state.user = null;
       })
-      // Fetch current user
       .addCase(fetchCurrentUser.pending, (state) => {
         state.isLoading = true;
       })
@@ -98,12 +94,9 @@ const authSlice = createSlice({
         console.log('⚠️ Redux: fetchCurrentUser.rejected, payload:', action.payload);
         console.log('⚠️ Current auth state - isAuthenticated:', state.isAuthenticated, 'user:', state.user?.email);
         state.isLoading = false;
-        // Only set error if it's not a 401 (user not logged in is normal)
         if (action.payload !== null) {
           state.error = action.payload as string;
         }
-        // Don't clear authentication state if user was already authenticated
-        // This prevents logout when fetchCurrentUser fails after successful login
         if (!state.isAuthenticated) {
           console.log('⚠️ Clearing auth state because user was not authenticated');
           state.isAuthenticated = false;
@@ -112,7 +105,6 @@ const authSlice = createSlice({
           console.log('✅ Keeping auth state because user was already authenticated');
         }
       })
-      // Logout
       .addCase(logout.fulfilled, (state) => {
         state.user = null;
         state.isAuthenticated = false;

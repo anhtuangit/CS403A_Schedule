@@ -16,15 +16,11 @@ interface ProjectTaskDetailModalProps {
   onTaskUpdate?: (updatedTask: ProjectTask) => void;
 }
 
-/**
- * Project Task Detail Modal - View only
- */
 const ProjectTaskDetailModal = ({ task, labels, onClose, onEdit, onDelete, canEdit = false, onTaskUpdate }: ProjectTaskDetailModalProps) => {
   const [currentTask, setCurrentTask] = useState<ProjectTask>(task);
   const [isUploading, setIsUploading] = useState(false);
   const fileInputRef = useRef<HTMLInputElement>(null);
 
-  // Update current task when task prop changes
   useEffect(() => {
     setCurrentTask(task);
   }, [task]);
@@ -119,11 +115,10 @@ const ProjectTaskDetailModal = ({ task, labels, onClose, onEdit, onDelete, canEd
               <button
                 onClick={onEdit}
                 disabled={!canEdit || !onEdit}
-                className={`p-2 transition-colors ${
-                  canEdit && onEdit
+                className={`p-2 transition-colors ${canEdit && onEdit
                     ? 'text-gray-500 hover:text-primary-500 cursor-pointer'
                     : 'text-gray-300 dark:text-gray-600 cursor-not-allowed opacity-50'
-                }`}
+                  }`}
                 title={canEdit ? "Chỉnh sửa" : "Bạn không có quyền chỉnh sửa"}
               >
                 <Icon icon="mdi:pencil" size={24} />
@@ -131,11 +126,10 @@ const ProjectTaskDetailModal = ({ task, labels, onClose, onEdit, onDelete, canEd
               <button
                 onClick={onDelete}
                 disabled={!canEdit || !onDelete}
-                className={`p-2 transition-colors ${
-                  canEdit && onDelete
+                className={`p-2 transition-colors ${canEdit && onDelete
                     ? 'text-gray-500 hover:text-red-500 cursor-pointer'
                     : 'text-gray-300 dark:text-gray-600 cursor-not-allowed opacity-50'
-                }`}
+                  }`}
                 title={canEdit ? "Xóa" : "Bạn không có quyền xóa"}
               >
                 <Icon icon="mdi:delete" size={24} />
@@ -149,9 +143,7 @@ const ProjectTaskDetailModal = ({ task, labels, onClose, onEdit, onDelete, canEd
             </div>
           </div>
 
-          {/* Content */}
           <div className="space-y-6">
-            {/* Title */}
             <div>
               <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
                 Tiêu đề
@@ -160,8 +152,6 @@ const ProjectTaskDetailModal = ({ task, labels, onClose, onEdit, onDelete, canEd
                 {currentTask.title}
               </h3>
             </div>
-
-            {/* Short Description */}
             {currentTask.shortDescription && (
               <div>
                 <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
@@ -172,8 +162,6 @@ const ProjectTaskDetailModal = ({ task, labels, onClose, onEdit, onDelete, canEd
                 </p>
               </div>
             )}
-
-            {/* Detailed Description */}
             {currentTask.detailedDescription && (
               <div>
                 <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
@@ -184,8 +172,6 @@ const ProjectTaskDetailModal = ({ task, labels, onClose, onEdit, onDelete, canEd
                 </p>
               </div>
             )}
-
-            {/* Labels */}
             {Object.entries(groupedLabels).length > 0 && (
               <div className="space-y-4">
                 {Object.entries(groupedLabels).map(([type, typeLabels]) => (
@@ -216,8 +202,6 @@ const ProjectTaskDetailModal = ({ task, labels, onClose, onEdit, onDelete, canEd
                 ))}
               </div>
             )}
-
-            {/* Subtasks */}
             {currentTask.subtasks && currentTask.subtasks.length > 0 && (
               <div>
                 <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
@@ -235,11 +219,10 @@ const ProjectTaskDetailModal = ({ task, labels, onClose, onEdit, onDelete, canEd
                         style={{ color: subtask.completed ? '#10B981' : '#9CA3AF' }}
                       />
                       <span
-                        className={`flex-1 ${
-                          subtask.completed
+                        className={`flex-1 ${subtask.completed
                             ? 'line-through text-gray-500 dark:text-gray-400'
                             : 'text-gray-900 dark:text-white'
-                        }`}
+                          }`}
                       >
                         {subtask.title}
                       </span>
@@ -248,8 +231,6 @@ const ProjectTaskDetailModal = ({ task, labels, onClose, onEdit, onDelete, canEd
                 </div>
               </div>
             )}
-
-            {/* Comments */}
             {currentTask.comments && currentTask.comments.length > 0 && (
               <div>
                 <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
@@ -288,8 +269,6 @@ const ProjectTaskDetailModal = ({ task, labels, onClose, onEdit, onDelete, canEd
                 </div>
               </div>
             )}
-
-            {/* Attachments */}
             <div>
               <div className="flex items-center justify-between mb-2">
                 <label className="block text-sm font-medium text-gray-700 dark:text-gray-300">
@@ -350,8 +329,6 @@ const ProjectTaskDetailModal = ({ task, labels, onClose, onEdit, onDelete, canEd
                 </div>
               )}
             </div>
-
-            {/* Email Reminder */}
             {currentTask.emailReminder && (
               <div>
                 <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
@@ -363,8 +340,6 @@ const ProjectTaskDetailModal = ({ task, labels, onClose, onEdit, onDelete, canEd
                 </div>
               </div>
             )}
-
-            {/* Created/Updated */}
             <div className="grid grid-cols-2 gap-4 pt-4 border-t border-gray-200 dark:border-gray-700">
               <div>
                 <label className="block text-xs text-gray-500 dark:text-gray-400 mb-1">
@@ -384,8 +359,6 @@ const ProjectTaskDetailModal = ({ task, labels, onClose, onEdit, onDelete, canEd
               </div>
             </div>
           </div>
-
-          {/* Footer */}
           <div className="flex justify-end gap-4 pt-6 mt-6 border-t border-gray-200 dark:border-gray-700">
             <button
               onClick={onClose}

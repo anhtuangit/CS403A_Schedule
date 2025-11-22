@@ -19,8 +19,6 @@ function App() {
   const { isAuthenticated, isLoading } = useSelector((state: RootState) => state.auth);
   const hasFetchedUser = React.useRef(false);
 
-  // Fetch current user on app mount to check if user is already logged in
-  // Only fetch once on mount
   useEffect(() => {
     if (!hasFetchedUser.current) {
       hasFetchedUser.current = true;
@@ -29,7 +27,6 @@ function App() {
     }
   }, [dispatch]);
 
-  // Show loading screen while checking authentication
   if (isLoading) {
     return (
       <div className="flex items-center justify-center min-h-screen">
@@ -41,7 +38,7 @@ function App() {
   return (
     <Routes>
       <Route path="/login" element={!isAuthenticated ? <LoginPage /> : <Navigate to="/" />} />
-      
+
       <Route element={<Layout />}>
         <Route
           path="/"
@@ -92,7 +89,7 @@ function App() {
           }
         />
       </Route>
-      
+
       <Route path="*" element={<Navigate to="/" />} />
     </Routes>
   );

@@ -45,9 +45,6 @@ export interface CreateTaskData {
   emailReminder?: string;
 }
 
-/**
- * Get all tasks
- */
 export const getTasks = async (params?: {
   timeSlot?: string;
   search?: string;
@@ -58,41 +55,26 @@ export const getTasks = async (params?: {
   return response.data;
 };
 
-/**
- * Get task by ID
- */
 export const getTaskById = async (id: string): Promise<{ task: Task }> => {
   const response = await api.get<{ task: Task }>(`/tasks/${id}`);
   return response.data;
 };
 
-/**
- * Create task
- */
 export const createTask = async (data: CreateTaskData): Promise<{ message: string; task: Task }> => {
   const response = await api.post<{ message: string; task: Task }>('/tasks', data);
   return response.data;
 };
 
-/**
- * Update task
- */
 export const updateTask = async (id: string, data: Partial<CreateTaskData>): Promise<{ message: string; task: Task }> => {
   const response = await api.put<{ message: string; task: Task }>(`/tasks/${id}`, data);
   return response.data;
 };
 
-/**
- * Delete task
- */
 export const deleteTask = async (id: string): Promise<{ message: string }> => {
   const response = await api.delete<{ message: string }>(`/tasks/${id}`);
   return response.data;
 };
 
-/**
- * Update task time slot (drag and drop)
- */
 export const updateTaskTimeSlot = async (
   id: string,
   data: { startTime?: string; endTime?: string; timeSlot?: string }
@@ -101,9 +83,6 @@ export const updateTaskTimeSlot = async (
   return response.data;
 };
 
-/**
- * Upload file
- */
 export const uploadFile = async (taskId: string, file: File): Promise<{ file: string }> => {
   const formData = new FormData();
   formData.append('file', file);
@@ -112,10 +91,6 @@ export const uploadFile = async (taskId: string, file: File): Promise<{ file: st
   });
   return response.data;
 };
-
-/**
- * Delete attachment
- */
 export const deleteAttachment = async (taskId: string, filename: string): Promise<{ message: string; attachments: string[] }> => {
   const response = await api.delete<{ message: string; attachments: string[] }>(`/tasks/${taskId}/attachments/${filename}`);
   return response.data;

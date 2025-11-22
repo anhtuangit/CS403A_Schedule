@@ -3,9 +3,6 @@ import Task from '../models/Task.model';
 import { getTimeSlotFromDate } from '../utils/timeSlot.util';
 import { sendEmailReminder } from '../utils/email.util';
 
-/**
- * Get all personal tasks
- */
 export const getTasks = async (req: Request, res: Response): Promise<void> => {
   try {
     if (!req.user) {
@@ -49,9 +46,6 @@ export const getTasks = async (req: Request, res: Response): Promise<void> => {
   }
 };
 
-/**
- * Get task by ID
- */
 export const getTaskById = async (req: Request, res: Response): Promise<void> => {
   try {
     if (!req.user) {
@@ -77,9 +71,6 @@ export const getTaskById = async (req: Request, res: Response): Promise<void> =>
   }
 };
 
-/**
- * Create task
- */
 export const createTask = async (req: Request, res: Response): Promise<void> => {
   try {
     if (!req.user) {
@@ -133,9 +124,6 @@ export const createTask = async (req: Request, res: Response): Promise<void> => 
   }
 };
 
-/**
- * Update task
- */
 export const updateTask = async (req: Request, res: Response): Promise<void> => {
   try {
     if (!req.user) {
@@ -194,9 +182,6 @@ export const updateTask = async (req: Request, res: Response): Promise<void> => 
   }
 };
 
-/**
- * Delete task
- */
 export const deleteTask = async (req: Request, res: Response): Promise<void> => {
   try {
     if (!req.user) {
@@ -220,9 +205,6 @@ export const deleteTask = async (req: Request, res: Response): Promise<void> => 
   }
 };
 
-/**
- * Update task time slot (drag and drop)
- */
 export const updateTaskTimeSlot = async (req: Request, res: Response): Promise<void> => {
   try {
     if (!req.user) {

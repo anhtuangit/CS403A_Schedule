@@ -5,9 +5,6 @@ import Project from '../models/Project.model';
 import LoginHistory from '../models/LoginHistory.model';
 import SystemConfig from '../models/SystemConfig.model';
 
-/**
- * Get all users
- */
 export const getUsers = async (req: Request, res: Response): Promise<void> => {
   try {
     const { search, role, isActive } = req.query;
@@ -54,22 +51,17 @@ export const getUsers = async (req: Request, res: Response): Promise<void> => {
   }
 };
 
-/**
- * Lock/Unlock user
- */
 export const toggleUserStatus = async (req: Request, res: Response): Promise<void> => {
   try {
     const { userId } = req.params;
     const { isActive } = req.body;
 
-    // Prevent locking root admin (first admin user)
     const user = await User.findById(userId);
     if (!user) {
       res.status(404).json({ message: 'User not found' });
       return;
     }
 
-    // Check if this is the first admin (root admin)
     const firstAdmin = await User.findOne({ role: 'admin' }).sort({ createdAt: 1 });
     if (firstAdmin && firstAdmin._id.toString() === userId && user.role === 'admin') {
       res.status(400).json({ message: 'Cannot lock root admin' });
@@ -88,9 +80,6 @@ export const toggleUserStatus = async (req: Request, res: Response): Promise<voi
   }
 };
 
-/**
- * Get system statistics
- */
 export const getStatistics = async (req: Request, res: Response): Promise<void> => {
   try {
     const [
@@ -185,9 +174,6 @@ export const getStatistics = async (req: Request, res: Response): Promise<void> 
   }
 };
 
-/**
- * Get system configuration
- */
 export const getSystemConfig = async (req: Request, res: Response): Promise<void> => {
   try {
     const config = await (SystemConfig as any).getConfig();
@@ -197,9 +183,6 @@ export const getSystemConfig = async (req: Request, res: Response): Promise<void
   }
 };
 
-/**
- * Update system configuration
- */
 export const updateSystemConfig = async (req: Request, res: Response): Promise<void> => {
   try {
     if (!req.user) {
@@ -236,9 +219,6 @@ export const updateSystemConfig = async (req: Request, res: Response): Promise<v
   }
 };
 
-/**
- * Get user login history (Admin view)
- */
 export const getUserLoginHistory = async (req: Request, res: Response): Promise<void> => {
   try {
     const { userId } = req.params;
